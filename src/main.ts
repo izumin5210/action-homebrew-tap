@@ -27,17 +27,27 @@ async function run() {
     core.debug(`Check ${formulaPath} in ${hbOwner}/${hbRepo}`);
 
     const octokit = new github.GitHub(tapGhToken);
-    const { data } = await octokit.repos.getContents({
-      owner: hbOwner,
-      repo: hbRepo,
-      path: formulaPath,
-    });
+    let content, sha: string | undefined;
+    try {
+      const { data } = await octokit.repos.getContents({
+        owner: hbOwner,
+        repo: hbRepo,
+        path: formulaPath,
+      });
 
-    core.debug(`Get contents result: ${JSON.stringify(data)}`);
+      core.debug(`Get contents result: ${JSON.stringify(data)}`);
 
-    if (Array.isArray(data) || data.type != "file") {
-      core.setFailed(`${formulaPath} in ${hbOwner}/${hbRepo} is not a file`)
-      return
+      if (Array.isArray(data) || data.type != "file") {
+        core.setFailed(`${formulaPath} in ${hbOwner}/${hbRepo} is not a file`)
+        return
+      }
+
+      content = data.content;
+      sha = data.sha;
+    } catch(e) {
+      if (e.status != 404) {
+        throw e
+      }
     }
 
     const tempDir = path.join((process.env['HOME'] as string), 'temp');
@@ -46,7 +56,7 @@ async function run() {
 
     let maltmillArgs = [`-token=${ghToken}`];
 
-    if (data.content == null) {
+    if (content == null) {
       core.debug("Starting: Create a new formula");
       maltmillArgs = [
         'new',
@@ -56,7 +66,7 @@ async function run() {
       ];
     } else {
       core.debug("Starting: Write an existing formula");
-      const buf = new Buffer(data.content, 'base64');
+      const buf = new Buffer(content, 'base64');
       fs.writeFileSync(tempFormulaPath, buf);
       core.debug(`Current formula:\n${buf.toString()}`);
       core.debug("Starting: Update an existing formula");
@@ -85,7 +95,7 @@ async function run() {
       path: formulaPath,
       content: newFormulaContent,
       message,
-      sha: data.sha,
+      sha,
       branch: core.getInput("tap-branch"),
     };
     if (payload.sha == "") {
