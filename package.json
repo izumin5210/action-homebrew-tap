@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "homebrew",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Create or update a Formula for Homebrew Tap",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/izumin5210/actions-homebrew.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "YourNameOrOrganization",
+  "author": "Masayuki Izumi <m@izum.in> (https://github.com/izumin5210)",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.1.3",

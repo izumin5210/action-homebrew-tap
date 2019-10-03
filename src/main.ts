@@ -6,22 +6,13 @@ import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as github from '@actions/github';
 
-const inputByMaltmillFlag = {
-  arch:            'arch',
-  os:              'os',
-  'build-ldflags': 'ldflags',
-  'build-tags':    'tags',
-  d:               'dest',
-  n:               'name',
-};
-
 async function run() {
   try {
-    const ghToken = core.getInput("github-token", { required: true });
-    const releaseGhToken = core.getInput("release-github-token", { required: true });
+    const ghToken = core.getInput("token", { required: true });
+    const releaseGhToken = core.getInput("release-token", { required: true });
 
     const [appOwner, appRepo] = (process.env.GITHUB_REPOSITORY || "").split('/');
-    const [hbOwner, hbRepo] = core.getInput("repository", { required: true }).split('/');
+    const [hbOwner, hbRepo] = core.getInput("tap", { required: true }).split('/');
 
     let formulaPath = core.getInput("formula");
     if (formulaPath.length == 0) {
@@ -73,12 +64,17 @@ async function run() {
     const maltmillPath = await getMaltmillPath(maltmillVersion);
     await exec.exec(maltmillPath, maltmillArgs);
 
+    let message = core.getInput("commit-message");
+    if (message.length == 0) {
+      message = `Bump ${appOwner}/${appRepo} formula`;
+    }
+
     await octokit.repos.createOrUpdateFile({
       owner: hbOwner,
       repo: hbRepo,
       path: formulaPath,
-      message: `Bump ${appOwner}/${appRepo} formula`,
       content: fs.readFileSync(tempFormulaPath, 'base64'),
+      message,
       sha: data.sha,
       branch: core.getInput("release-branch"),
     });

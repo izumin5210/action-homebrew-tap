@@ -1,10 +1,24 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'homebrew'
+description: 'Create or update a Formula for Homebrew Tap'
+author: 'izumin5210'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  tap:
+    required: true
+    description: "GitHub repository slug(<username>/<repository>) for Homebrew Tap"
+  token:
+    required: true
+    description: 'As provided by Github Actions'
+  release-token:
+    description: "GitHub access token to create/update formulae on homebrew tap repository"
+  release-branch:
+    description: "Branch name that commited formulae"
+  commit-message:
+    description: "A message for commiting Homebrew formulae (default: "Bump <repo_slug> formula")"
+  formula:
+    description: "Path to formula file on Homebrew Tap reopsitory(default: Formula/<reponame>.rb)"
+  maltmill-version:
+    description: "Version of github.com/Songmu/maltmill"
+    default: 'v0.4.1'
 runs:
   using: 'node12'
   main: 'lib/main.js'
