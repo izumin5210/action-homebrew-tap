@@ -88,7 +88,7 @@ async function run() {
       sha: data.sha,
       branch: core.getInput("tap-branch"),
     };
-    core.debug(`Send createOrUpdateFile: ${payload}`);
+    core.debug(`Send createOrUpdateFile: ${JSON.stringify(payload)}`);
 
     await octokit.repos.createOrUpdateFile(payload);
   } catch (error) {
