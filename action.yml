@@ -13,7 +13,7 @@ inputs:
   release-branch:
     description: "Branch name that commited formulae"
   commit-message:
-    description: "A message for commiting Homebrew formulae (default: "Bump <repo_slug> formula")"
+    description: 'A message for commiting Homebrew formulae (default: "Bump <repo_slug> formula")'
   formula:
     description: "Path to formula file on Homebrew Tap reopsitory(default: Formula/<reponame>.rb)"
   maltmill-version:
