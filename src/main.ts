@@ -81,6 +81,10 @@ async function run() {
     const maltmillPath = await getMaltmillPath(maltmillVersion);
     await exec.exec(maltmillPath, maltmillArgs);
 
+    if (content == null) {
+      await io.mv(`${appRepo}.rb`, tempFormulaPath);
+    }
+
     const newFormulaContent = fs.readFileSync(tempFormulaPath, 'base64');
     core.debug(`New formula:\n${(new Buffer(newFormulaContent, 'base64')).toString()}`)
 
