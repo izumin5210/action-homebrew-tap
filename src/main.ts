@@ -88,6 +88,12 @@ async function run() {
       sha: data.sha,
       branch: core.getInput("tap-branch"),
     };
+    if (payload.sha == "") {
+      delete payload.sha;
+    }
+    if (payload.branch == "") {
+      delete payload.branch;
+    }
     core.debug(`Send createOrUpdateFile: ${JSON.stringify(payload)}`);
 
     await octokit.repos.createOrUpdateFile(payload);
