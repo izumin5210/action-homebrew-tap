@@ -1,5 +1,5 @@
 {
-  "name": "homebrew",
+  "name": "homebrew-tap",
   "version": "0.0.0",
   "private": true,
   "description": "Create or update a Formula for Homebrew Tap",

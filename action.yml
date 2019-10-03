@@ -1,4 +1,4 @@
-name: 'homebrew'
+name: 'homebrew-tap'
 description: 'Create or update a Formula for Homebrew Tap'
 author: 'izumin5210'
 inputs:
