@@ -79,7 +79,7 @@ async function run() {
       message = `Bump ${appOwner}/${appRepo} formula`;
     }
 
-    await octokit.repos.createOrUpdateFile({
+    const payload = {
       owner: hbOwner,
       repo: hbRepo,
       path: formulaPath,
@@ -87,7 +87,10 @@ async function run() {
       message,
       sha: data.sha,
       branch: core.getInput("tap-branch"),
-    });
+    };
+    core.debug(`Send createOrUpdateFile: ${payload}`);
+
+    await octokit.repos.createOrUpdateFile(payload);
   } catch (error) {
     core.setFailed(error.message);
   }
