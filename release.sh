@@ -19,7 +19,7 @@ rm -rf node_modules
 gsed -i '/node_modules/d' .gitignore
 npm install --production
 git add node_modules .gitignore
-git commit -m node_modules
+git commit -m Release
 git push origin -f ${branch}
 
 if [ -n "$newTag" ]; then
