@@ -98,6 +98,7 @@ async function run() {
 
     await octokit.repos.createOrUpdateFile(payload);
   } catch (error) {
+    core.debug(`error: ${JSON.stringify(error)}`);
     core.setFailed(error.message);
   }
 }
