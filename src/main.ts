@@ -4,26 +4,8 @@ import * as process from 'process';
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
+import * as io from '@actions/io';
 import * as github from '@actions/github';
-
-// https://github.com/actions/setup-go/blob/75259a5ae02e59409ee6c4fa1e37ed46ea4e5b8d/src/installer.ts#L2
-let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
-
-// https://github.com/actions/setup-go/blob/v1.1.1/src/installer.ts#L14-L27
-if (!tempDirectory) {
-  let baseLocation;
-  if (process.platform === 'win32') {
-    // On windows use the USERPROFILE env variable
-    baseLocation = process.env['USERPROFILE'] || 'C:\\';
-  } else {
-    if (process.platform === 'darwin') {
-      baseLocation = '/Users';
-    } else {
-      baseLocation = '/home';
-    }
-  }
-  tempDirectory = path.join(baseLocation, 'actions', 'temp');
-}
 
 async function run() {
   try {
@@ -58,7 +40,9 @@ async function run() {
       return
     }
 
-    const tempFormulaPath = path.join(tempDirectory, path.basename(formulaPath));
+    const tempDir = path.join((process.env['HOME'] as string), 'temp');
+    await io.mkdirP(tempDir);
+    const tempFormulaPath = path.join(tempDir, path.basename(formulaPath));
 
     let maltmillArgs = [`-token=${ghToken}`];
 
