@@ -32,7 +32,7 @@ async function run() {
       path: formulaPath,
     });
 
-    core.debug(`Get contents result: ${data}`);
+    core.debug(`Get contents result: ${JSON.stringify(data)}`);
 
     if (Array.isArray(data) || data.type != "file") {
       core.setFailed(`${formulaPath} in ${hbOwner}/${hbRepo} is not a file`)
@@ -45,6 +45,7 @@ async function run() {
     let maltmillArgs = [`-token=${ghToken}`];
 
     if (data.content == null) {
+      core.debug("Starting: Create a new formula");
       maltmillArgs = [
         'new',
         ...maltmillArgs,
@@ -52,7 +53,9 @@ async function run() {
         `${appOwner}/${appRepo}`,
       ];
     } else {
+      core.debug("Starting: Write an existing formula");
       fs.writeFileSync(tempFormulaPath, new Buffer(data.content, 'base64'));
+      core.debug("Starting: Update an existing formula");
       maltmillArgs = [
         ...maltmillArgs,
         '-w',
