@@ -76,7 +76,7 @@ async function run() {
       content: fs.readFileSync(tempFormulaPath, 'base64'),
       message,
       sha: data.sha,
-      branch: core.getInput("release-branch"),
+      branch: core.getInput("tap-branch"),
     });
   } catch (error) {
     core.setFailed(error.message);
