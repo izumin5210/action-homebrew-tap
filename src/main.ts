@@ -9,7 +9,7 @@ import * as github from '@actions/github';
 async function run() {
   try {
     const ghToken = core.getInput("token", { required: true });
-    const releaseGhToken = core.getInput("release-token", { required: true });
+    const tapGhToken = core.getInput("tap-token", { required: true });
 
     const [appOwner, appRepo] = (process.env.GITHUB_REPOSITORY || "").split('/');
     const [hbOwner, hbRepo] = core.getInput("tap", { required: true }).split('/');
@@ -25,7 +25,7 @@ async function run() {
 
     core.debug(`Check ${formulaPath} in ${hbOwner}/${hbRepo}`);
 
-    const octokit = new github.GitHub(releaseGhToken);
+    const octokit = new github.GitHub(tapGhToken);
     const { data } = await octokit.repos.getContents({
       owner: hbOwner,
       repo: hbRepo,
