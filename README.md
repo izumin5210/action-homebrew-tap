@@ -3,7 +3,7 @@
 ## Usage:
 
 ```yaml
-uses: izumin5210/action-homebrew@v1
+uses: izumin5210/action-homebrew-tap@v1
 with:
   tap: izumin5210/homebrew-tools
   token: ${{ secrets.GITHUB_TOKEN }}
@@ -34,7 +34,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update Homebrew Formula
-      uses: izumin5210/action-homebrew@releases/v0
+      uses: izumin5210/action-homebrew-tap@releases/v0
       with:
         tap: izumin5210/homebrew-tools
         token: ${{ secrets.GITHUB_TOKEN }}
