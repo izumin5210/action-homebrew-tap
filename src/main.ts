@@ -80,6 +80,7 @@ async function run() {
       message: `Bump ${appOwner}/${appRepo} formula`,
       content: fs.readFileSync(tempFormulaPath, 'base64'),
       sha: data.sha,
+      branch: core.getInput("release-branch"),
     });
   } catch (error) {
     core.setFailed(error.message);
