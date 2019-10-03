@@ -56,7 +56,9 @@ async function run() {
       ];
     } else {
       core.debug("Starting: Write an existing formula");
-      fs.writeFileSync(tempFormulaPath, new Buffer(data.content, 'base64'));
+      const buf = new Buffer(data.content, 'base64');
+      fs.writeFileSync(tempFormulaPath, buf);
+      core.debug(`Current formula:\n${buf.toString()}`);
       core.debug("Starting: Update an existing formula");
       maltmillArgs = [
         ...maltmillArgs,
@@ -69,6 +71,9 @@ async function run() {
     const maltmillPath = await getMaltmillPath(maltmillVersion);
     await exec.exec(maltmillPath, maltmillArgs);
 
+    const newFormulaContent = fs.readFileSync(tempFormulaPath, 'base64');
+    core.debug(`New formula:\n${(new Buffer(newFormulaContent, 'base64')).toString()}`)
+
     let message = core.getInput("commit-message");
     if (message.length == 0) {
       message = `Bump ${appOwner}/${appRepo} formula`;
@@ -78,7 +83,7 @@ async function run() {
       owner: hbOwner,
       repo: hbRepo,
       path: formulaPath,
-      content: fs.readFileSync(tempFormulaPath, 'base64'),
+      content: newFormulaContent,
       message,
       sha: data.sha,
       branch: core.getInput("tap-branch"),
